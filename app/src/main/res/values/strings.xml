@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Furniture App</string>
+    <string name="categories">Categories</string>
+    <string name="placeholder">Chair, desk, lamp etc</string>
+    <string name="heading_text">Explore What\nYour Home Needs</string>
+    <string name="see_all">See all</string>
+</resources>
