@@ -1,8 +1,12 @@
 package com.nameisjayant.furnitureapp.screens
 
 import androidx.compose.foundation.BorderStroke
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
@@ -11,9 +15,14 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomEnd
+import androidx.compose.ui.Alignment.Companion.Center
+import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -21,64 +30,128 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nameisjayant.furnitureapp.R
+import com.nameisjayant.furnitureapp.commonUi.SpacerHeight
 import com.nameisjayant.furnitureapp.commonUi.SpacerWidth
-import com.nameisjayant.furnitureapp.ui.theme.DarkOrange
-import com.nameisjayant.furnitureapp.ui.theme.LightGray
-import com.nameisjayant.furnitureapp.ui.theme.PoppinFont
-import com.nameisjayant.furnitureapp.ui.theme.TextColor
+import com.nameisjayant.furnitureapp.models.Category
+import com.nameisjayant.furnitureapp.models.categoryList
+import com.nameisjayant.furnitureapp.ui.theme.*
 
 
 @Composable
 fun HomeScreen() {
     var search by remember { mutableStateOf("") }
-    Box(
+    LazyColumn(
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)
     ) {
 
-        Column {
+        item {
             HomeHeader()
+        }
+        item {
             CustomSearchView(text = search) {
                 search = it
             }
+        }
+        item {
             CategoryRow()
+        }
+        item {
+            SpacerHeight(20.dp)
+            ProductRow()
         }
 
     }
 }
 
-@Composable
-fun CategoryRow() {
 
-    Column() {
-        Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
-            Text(
-                text = stringResource(R.string.categories), style = TextStyle(
-                    color = TextColor,
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.W600,
-                    fontFamily = PoppinFont,
-                    textAlign = TextAlign.Center
-                ),
-                modifier = Modifier.align(CenterVertically)
-            )
-            TextButton(onClick = { }) {
-                Text(
-                    text = stringResource(R.string.see_all), style = TextStyle(
-                        color = DarkOrange,
-                        fontSize = 12.sp,
-                        fontWeight = FontWeight.W400,
-                        fontFamily = PoppinFont,
-                        textAlign = TextAlign.Center
-                    )
-                )
-                SpacerWidth(3.dp)
-                Icon(Icons.Default.ArrowForward, contentDescription = "", tint = DarkOrange)
+@Composable
+fun CategoryRow(
+
+) {
+
+    Column {
+        CommonTitle(title = stringResource(R.string.categories))
+        SpacerHeight(20.dp)
+        LazyRow {
+            items(categoryList, key = { it.id }) {
+                CategoryEachRow(category = it)
             }
         }
     }
 
+}
+
+@Composable
+fun ProductRow() {
+    Column {
+        CommonTitle(title = stringResource(R.string.popular))
+    }
+}
+
+@Composable
+fun CommonTitle(
+    title: String,
+    onClick: () -> Unit = {}
+) {
+    Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
+        Text(
+            text = title, style = TextStyle(
+                color = TextColor,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.W600,
+                fontFamily = PoppinFont,
+                textAlign = TextAlign.Center
+            ), modifier = Modifier.align(CenterVertically)
+        )
+        TextButton(onClick = { onClick() }) {
+            Text(
+                text = stringResource(R.string.see_all), style = TextStyle(
+                    color = DarkOrange,
+                    fontSize = 12.sp,
+                    fontWeight = FontWeight.W400,
+                    fontFamily = PoppinFont,
+                    textAlign = TextAlign.Center
+                )
+            )
+            SpacerWidth(3.dp)
+            Icon(Icons.Default.ArrowForward, contentDescription = "", tint = DarkOrange)
+        }
+    }
+}
+
+@Composable
+fun CategoryEachRow(
+    category: Category
+) {
+    Box(
+        modifier = Modifier
+            .padding(end = 15.dp)
+            .width(140.dp)
+            .height(80.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(category.color)
+    ) {
+        Text(
+            text = category.title, style = TextStyle(
+                color = TextColor,
+                fontSize = 14.sp,
+                fontWeight = FontWeight.W400,
+                fontFamily = PoppinFont
+            ),
+            modifier = Modifier
+                .align(CenterStart)
+                .padding(start = 10.dp)
+        )
+        Image(
+            painter = painterResource(id = category.image), contentDescription = "",
+            modifier = Modifier
+                .size(60.dp)
+                .align(BottomEnd)
+                .padding(end = 5.dp)
+        )
+    }
 }
 
 @Composable
@@ -138,7 +211,9 @@ fun HomeHeader(
                 .align(CenterVertically)
         ) {
             Icon(
-                Icons.Default.Notifications, contentDescription = "", tint = DarkOrange
+                painter = painterResource(id = R.drawable.notification),
+                contentDescription = "",
+                tint = DarkOrange
             )
         }
     }
