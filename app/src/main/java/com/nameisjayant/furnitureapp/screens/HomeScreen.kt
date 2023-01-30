@@ -6,6 +6,9 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
@@ -15,13 +18,18 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.Bottom
+import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.BottomEnd
+import androidx.compose.ui.Alignment.Companion.BottomStart
 import androidx.compose.ui.Alignment.Companion.Center
 import androidx.compose.ui.Alignment.Companion.CenterStart
 import androidx.compose.ui.Alignment.Companion.CenterVertically
+import androidx.compose.ui.Alignment.Companion.TopEnd
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
@@ -29,11 +37,16 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.flowlayout.FlowColumn
+import com.google.accompanist.flowlayout.FlowRow
+import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.nameisjayant.furnitureapp.R
 import com.nameisjayant.furnitureapp.commonUi.SpacerHeight
 import com.nameisjayant.furnitureapp.commonUi.SpacerWidth
 import com.nameisjayant.furnitureapp.models.Category
+import com.nameisjayant.furnitureapp.models.PopularProducts
 import com.nameisjayant.furnitureapp.models.categoryList
+import com.nameisjayant.furnitureapp.models.popularProductList
 import com.nameisjayant.furnitureapp.ui.theme.*
 
 
@@ -61,6 +74,12 @@ fun HomeScreen() {
             SpacerHeight(20.dp)
             ProductRow()
         }
+        item {
+            Banner()
+        }
+        item {
+            RoomsHeader()
+        }
 
     }
 }
@@ -87,13 +106,123 @@ fun CategoryRow(
 fun ProductRow() {
     Column {
         CommonTitle(title = stringResource(R.string.popular))
+        SpacerHeight(20.dp)
+
+        FlowRow(
+            modifier = Modifier.fillMaxWidth(),
+            mainAxisAlignment = MainAxisAlignment.SpaceBetween
+        ) {
+            popularProductList.forEach {
+                PopularProductGridView(it)
+            }
+        }
+
+
     }
 }
 
 @Composable
+fun RoomsHeader() {
+    Column {
+        Text(
+            text = stringResource(R.string.rooms), style = TextStyle(
+                color = TextColor,
+                fontSize = 20.sp,
+                fontWeight = FontWeight.W600,
+                fontFamily = PoppinFont,
+            )
+        )
+        SpacerHeight(5.dp)
+        Text(
+            text = stringResource(R.string.room_des), style = TextStyle(
+                color = LightGray,
+                fontSize = 12.sp,
+                fontWeight = FontWeight.W400,
+                fontFamily = PoppinFont,
+            )
+        )
+    }
+}
+
+@Composable
+fun Banner() {
+    Image(
+        painter = painterResource(id = R.drawable.banner), contentDescription = "",
+        modifier = Modifier
+            .padding(vertical = 20.dp)
+            .fillMaxWidth()
+            .height(113.dp),
+        contentScale = ContentScale.Fit
+    )
+}
+
+@Composable
+fun PopularProductGridView(
+    popularProducts: PopularProducts
+) {
+
+    Box(
+        modifier = Modifier.height(208.dp)
+    ) {
+        Card(
+            modifier = Modifier
+                .width(150.dp)
+                .height(155.dp)
+                .align(BottomCenter),
+            shape = RoundedCornerShape(8.dp),
+        ) {
+            Box {
+                Column(
+                    modifier = Modifier
+                        .padding(15.dp)
+                        .align(BottomStart)
+                ) {
+                    Text(
+                        text = popularProducts.title, style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.W400,
+                            fontFamily = PoppinFont,
+                            color = LightGray
+                        )
+                    )
+                    Text(
+                        text = popularProducts.price, style = TextStyle(
+                            fontSize = 14.sp,
+                            fontWeight = FontWeight.W600,
+                            fontFamily = PoppinFont,
+                            color = TextColor
+                        )
+                    )
+                }
+            }
+        }
+        Box {
+            Image(
+                painter = painterResource(id = popularProducts.image),
+                contentDescription = "",
+                modifier = Modifier
+                    .width(141.dp)
+                    .height(149.dp)
+                    .padding(horizontal = 15.dp)
+                    .offset(0.dp, (-5).dp)
+            )
+            Icon(
+                painter = painterResource(id = R.drawable.wishlist), contentDescription = "",
+                modifier = Modifier
+                    .padding(20.dp)
+                    .size(32.dp)
+                    .align(TopEnd),
+                tint = Color.Unspecified
+            )
+        }
+
+    }
+
+}
+
+@Composable
 fun CommonTitle(
-    title: String,
-    onClick: () -> Unit = {}
+    title: String, onClick: () -> Unit = {}
 ) {
     Row(modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween) {
         Text(
@@ -139,13 +268,13 @@ fun CategoryEachRow(
                 fontSize = 14.sp,
                 fontWeight = FontWeight.W400,
                 fontFamily = PoppinFont
-            ),
-            modifier = Modifier
+            ), modifier = Modifier
                 .align(CenterStart)
                 .padding(start = 10.dp)
         )
         Image(
-            painter = painterResource(id = category.image), contentDescription = "",
+            painter = painterResource(id = category.image),
+            contentDescription = "",
             modifier = Modifier
                 .size(60.dp)
                 .align(BottomEnd)

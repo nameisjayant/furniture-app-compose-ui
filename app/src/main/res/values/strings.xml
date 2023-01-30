@@ -5,4 +5,6 @@
     <string name="heading_text">Explore What\nYour Home Needs</string>
     <string name="see_all">See all</string>
     <string name="popular">Popular</string>
+    <string name="rooms">Rooms</string>
+    <string name="room_des">Furniture for every corners in your home</string>
 </resources>
