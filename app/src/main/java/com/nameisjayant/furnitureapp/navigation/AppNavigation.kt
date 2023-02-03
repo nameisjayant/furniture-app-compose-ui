@@ -4,6 +4,7 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.nameisjayant.furnitureapp.screens.CheckoutScreen
 import com.nameisjayant.furnitureapp.screens.HomeScreen
 import com.nameisjayant.furnitureapp.screens.ProductDetailScreen
 
@@ -13,12 +14,15 @@ fun AppNavigation() {
 
     val navHostController = rememberNavController()
 
-    NavHost(navController = navHostController, startDestination = Routes.HomeScreen) {
+    NavHost(navController = navHostController, startDestination = Routes.CheckoutScreen) {
         composable(Routes.HomeScreen) {
             HomeScreen(navHostController)
         }
         composable(Routes.ProductScreen) {
             ProductDetailScreen(navHostController)
+        }
+        composable(Routes.CheckoutScreen) {
+            CheckoutScreen(navHostController = navHostController)
         }
     }
 

@@ -1,6 +1,5 @@
 package com.nameisjayant.furnitureapp.screens
 
-import android.hardware.lights.Light
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
@@ -13,10 +12,8 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.*
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
@@ -354,8 +351,8 @@ fun HeaderIcon() {
             .padding(horizontal = 15.dp, vertical = 50.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        AppIconButton(icon = R.drawable.back)
-        AppIconButton(icon = R.drawable.share)
+        AppIconButtonDrawable(icon = R.drawable.back)
+        AppIconButtonDrawable(icon = R.drawable.share)
     }
 
 }

@@ -30,7 +30,7 @@ fun SpacerWidth(width: Dp = 5.dp) {
 
 @SuppressLint("ModifierParameter")
 @Composable
-fun AppIconButton(
+fun AppIconButtonDrawable(
     @DrawableRes icon: Int,
     tint: Color = Color.Unspecified,
     modifier: Modifier = Modifier,
@@ -40,6 +40,20 @@ fun AppIconButton(
         Icon(painter = painterResource(id = icon), contentDescription = "", tint = tint)
     }
 }
+
+@SuppressLint("ModifierParameter")
+@Composable
+fun AppIconButton(
+    icon: ImageVector,
+    tint: Color = Color.Unspecified,
+    modifier: Modifier = Modifier,
+    onClick: () -> Unit = {}
+) {
+    IconButton(onClick = { onClick() }, modifier = modifier.size(32.dp)) {
+        Icon(imageVector = icon, contentDescription = "", tint = tint)
+    }
+}
+
 
 @SuppressLint("ModifierParameter")
 @Composable
