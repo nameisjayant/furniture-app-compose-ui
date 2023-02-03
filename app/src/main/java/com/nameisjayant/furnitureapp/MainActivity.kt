@@ -15,6 +15,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import com.nameisjayant.furnitureapp.navigation.AppNavigation
 import com.nameisjayant.furnitureapp.screens.HomeScreen
 import com.nameisjayant.furnitureapp.screens.ProductDetailScreen
 import com.nameisjayant.furnitureapp.ui.theme.FurnitureAppTheme
@@ -31,7 +32,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colors.background,
                 ) {
-                    ProductDetailScreen()
+                    AppNavigation()
                 }
             }
         }

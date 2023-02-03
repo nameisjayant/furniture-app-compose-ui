@@ -30,6 +30,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.flowlayout.FlowRow
 import com.nameisjayant.furnitureapp.R
 import com.nameisjayant.furnitureapp.commonUi.*
@@ -37,7 +38,9 @@ import com.nameisjayant.furnitureapp.models.popularProductList
 import com.nameisjayant.furnitureapp.ui.theme.*
 
 @Composable
-fun ProductDetailScreen() {
+fun ProductDetailScreen(
+    navHostController: NavHostController
+) {
 
     val chipList = listOf("Description", "Material", "Review")
     var selected by remember { mutableStateOf("Description") }

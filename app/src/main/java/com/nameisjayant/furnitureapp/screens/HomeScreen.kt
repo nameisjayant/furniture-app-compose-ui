@@ -3,6 +3,7 @@ package com.nameisjayant.furnitureapp.screens
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
@@ -37,6 +38,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.google.accompanist.flowlayout.FlowColumn
 import com.google.accompanist.flowlayout.FlowRow
 import com.google.accompanist.flowlayout.MainAxisAlignment
@@ -44,11 +46,14 @@ import com.nameisjayant.furnitureapp.R
 import com.nameisjayant.furnitureapp.commonUi.SpacerHeight
 import com.nameisjayant.furnitureapp.commonUi.SpacerWidth
 import com.nameisjayant.furnitureapp.models.*
+import com.nameisjayant.furnitureapp.navigation.Routes
 import com.nameisjayant.furnitureapp.ui.theme.*
 
 
 @Composable
-fun HomeScreen() {
+fun HomeScreen(
+    navHostController: NavHostController
+) {
     var search by remember { mutableStateOf("") }
     LazyColumn(
         modifier = Modifier
@@ -69,7 +74,7 @@ fun HomeScreen() {
         }
         item {
             SpacerHeight(20.dp)
-            ProductRow()
+            ProductRow(navHostController)
         }
         item {
             Banner()
@@ -100,17 +105,22 @@ fun CategoryRow(
 }
 
 @Composable
-fun ProductRow() {
+fun ProductRow(
+    navHostController: NavHostController
+) {
     Column {
         CommonTitle(title = stringResource(R.string.popular))
         SpacerHeight(20.dp)
 
         FlowRow(
             modifier = Modifier.fillMaxWidth(),
-            mainAxisAlignment = MainAxisAlignment.SpaceBetween
+            mainAxisSpacing = 10.dp,
+            mainAxisAlignment = MainAxisAlignment.SpaceEvenly
         ) {
             popularProductList.forEach {
-                PopularProductGridView(it)
+                PopularProductGridView(it){
+                    navHostController.navigate(Routes.ProductScreen)
+                }
             }
         }
 
@@ -153,9 +163,10 @@ fun Banner() {
         painter = painterResource(id = R.drawable.banner), contentDescription = "",
         modifier = Modifier
             .padding(vertical = 20.dp)
+            .clip(RoundedCornerShape(8.dp))
             .fillMaxWidth()
             .height(113.dp),
-        contentScale = ContentScale.Fit
+        contentScale = ContentScale.FillWidth
     )
 }
 
@@ -163,11 +174,13 @@ fun Banner() {
 fun PopularProductGridView(
     popularProducts: PopularProducts,
     modifier: Modifier = Modifier,
+    onClick: () -> Unit={}
 
 ) {
 
     Box(
         modifier = modifier.height(208.dp)
+            .clickable { onClick() }
     ) {
         Card(
             modifier = Modifier
