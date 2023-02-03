@@ -8,4 +8,7 @@
     <string name="rooms">Rooms</string>
     <string name="room_des">Furniture for every corners in your home</string>
     <string name="product_name">Jan Sflanaganvik sofa</string>
+    <string name="add_to_ba">Add to bag</string>
+    <string name="description">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc consectetur velit at massa vehicula, quis fringilla urna gravida.</string>
+    <string name="recommend_products">Sofa you might like</string>
 </resources>

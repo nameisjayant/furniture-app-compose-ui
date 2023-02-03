@@ -161,11 +161,13 @@ fun Banner() {
 
 @Composable
 fun PopularProductGridView(
-    popularProducts: PopularProducts
+    popularProducts: PopularProducts,
+    modifier: Modifier = Modifier,
+
 ) {
 
     Box(
-        modifier = Modifier.height(208.dp)
+        modifier = modifier.height(208.dp)
     ) {
         Card(
             modifier = Modifier

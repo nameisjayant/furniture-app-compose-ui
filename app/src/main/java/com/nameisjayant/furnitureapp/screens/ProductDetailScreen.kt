@@ -1,17 +1,23 @@
 package com.nameisjayant.furnitureapp.screens
 
+import android.hardware.lights.Light
 import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.*
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material.icons.outlined.FavoriteBorder
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.BottomCenter
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -24,15 +30,17 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.google.accompanist.flowlayout.FlowRow
 import com.nameisjayant.furnitureapp.R
-import com.nameisjayant.furnitureapp.commonUi.AppIconButton
-import com.nameisjayant.furnitureapp.commonUi.AppIconDrawable
-import com.nameisjayant.furnitureapp.commonUi.SpacerHeight
-import com.nameisjayant.furnitureapp.commonUi.SpacerWidth
+import com.nameisjayant.furnitureapp.commonUi.*
+import com.nameisjayant.furnitureapp.models.popularProductList
 import com.nameisjayant.furnitureapp.ui.theme.*
 
 @Composable
 fun ProductDetailScreen() {
+
+    val chipList = listOf("Description", "Material", "Review")
+    var selected by remember { mutableStateOf("Description") }
 
     Box(
         modifier = Modifier.fillMaxSize()
@@ -55,19 +63,80 @@ fun ProductDetailScreen() {
                     .fillMaxSize(),
                 shape = RoundedCornerShape(topStart = 20.dp, topEnd = 20.dp)
             ) {
-                LazyColumn {
+                LazyColumn(
+                    modifier = Modifier.padding(bottom = 70.dp)
+                ) {
                     item {
                         ProductHeaderSection()
                     }
                     item {
                         RatingSection()
                     }
+                    item {
+                        FlowRow(
+                            modifier = Modifier.padding(vertical = 15.dp),
+                            crossAxisSpacing = 10.dp
+                        ) {
+                            chipList.forEach {
+                                CustomChip(title = it, selected = it == selected) { data ->
+                                    selected = data
+                                }
+                            }
+                        }
+                        Text(
+                            text = stringResource(R.string.description), style = TextStyle(
+                                fontSize = 14.sp,
+                                fontWeight = FontWeight.W400,
+                                color = LightGray
+                            ),
+                            modifier = Modifier.padding(horizontal = 20.dp)
+                        )
+                        SpacerHeight(15.dp)
+                        Divider(
+                            modifier = Modifier.fillMaxWidth(),
+                            color = GrayColor,
+                            thickness = 5.dp
+                        )
+                    }
+                    item {
+                        RecommendProducts()
+                    }
                 }
+
             }
 
         }
+        BottomBarItem(
+            modifier = Modifier.align(BottomCenter)
+        )
     }
 
+}
+
+@Composable
+fun RecommendProducts() {
+    Column(
+        modifier = Modifier.padding(20.dp)
+    ) {
+        Text(
+            text = stringResource(R.string.recommend_products), style = TextStyle(
+                fontSize = 16.sp,
+                fontWeight = FontWeight.W600,
+                color = TextColor
+            )
+        )
+        LazyRow {
+            item{
+                SpacerWidth()
+            }
+            items(popularProductList) {
+                PopularProductGridView(
+                    popularProducts = it,
+                    modifier = Modifier.padding(end = 10.dp, top = 15.dp)
+                )
+            }
+        }
+    }
 }
 
 @Composable
@@ -192,6 +261,71 @@ fun RatingSection() {
         }
     }
 }
+
+@Composable
+fun CustomChip(
+    title: String,
+    selected: Boolean,
+    modifier: Modifier = Modifier,
+    onValueChange: (String) -> Unit
+) {
+    TextButton(
+        onClick = { onValueChange(title) },
+        shape = RoundedCornerShape(8.dp),
+        colors = ButtonDefaults.buttonColors(
+            backgroundColor = if (selected) LightOrange else Color.Transparent
+        ),
+        elevation = ButtonDefaults.elevation(0.dp),
+        modifier = modifier.padding(start = 20.dp)
+    ) {
+        Text(
+            text = title, style = TextStyle(
+                color = if (selected) DarkOrange else LightGray,
+                fontWeight = if (selected) FontWeight.W600 else FontWeight.W400,
+                fontSize = if (selected) 16.sp else 14.sp
+            )
+        )
+    }
+}
+
+
+@Composable
+fun BottomBarItem(
+    modifier: Modifier = Modifier
+) {
+
+    Column(
+        modifier = modifier.fillMaxWidth()
+    ) {
+        Divider(modifier = Modifier.fillMaxWidth(), color = LineColor)
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(20.dp)
+        ) {
+            TextButton(
+                onClick = { },
+                modifier = Modifier
+                    .size(40.dp),
+                shape = RoundedCornerShape(8.dp),
+                elevation = ButtonDefaults.elevation(0.dp),
+                colors = ButtonDefaults.buttonColors(backgroundColor = Color.White),
+                border = BorderStroke(1.dp, LightGray)
+            ) {
+                Icon(
+                    Icons.Outlined.FavoriteBorder,
+                    contentDescription = "",
+                    tint = LightGray,
+                    modifier = Modifier.size(16.dp)
+                )
+            }
+            SpacerWidth(10.dp)
+            AppButton(title = stringResource(R.string.add_to_ba), modifier = Modifier.weight(0.7f))
+        }
+    }
+
+}
+
 
 @Composable
 fun ProductCount(
