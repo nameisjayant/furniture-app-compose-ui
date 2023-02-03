@@ -14,7 +14,7 @@ fun AppNavigation() {
 
     val navHostController = rememberNavController()
 
-    NavHost(navController = navHostController, startDestination = Routes.CheckoutScreen) {
+    NavHost(navController = navHostController, startDestination = Routes.HomeScreen) {
         composable(Routes.HomeScreen) {
             HomeScreen(navHostController)
         }

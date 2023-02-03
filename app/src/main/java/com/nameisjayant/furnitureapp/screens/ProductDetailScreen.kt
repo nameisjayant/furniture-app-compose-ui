@@ -32,6 +32,7 @@ import com.google.accompanist.flowlayout.FlowRow
 import com.nameisjayant.furnitureapp.R
 import com.nameisjayant.furnitureapp.commonUi.*
 import com.nameisjayant.furnitureapp.models.popularProductList
+import com.nameisjayant.furnitureapp.navigation.Routes
 import com.nameisjayant.furnitureapp.ui.theme.*
 
 @Composable
@@ -56,7 +57,7 @@ fun ProductDetailScreen(
                     .height(250.dp)
                     .fillMaxWidth()
             )
-            HeaderIcon()
+            HeaderIcon(navHostController)
             Card(
                 modifier = Modifier
                     .padding(top = 230.dp)
@@ -107,7 +108,8 @@ fun ProductDetailScreen(
 
         }
         BottomBarItem(
-            modifier = Modifier.align(BottomCenter)
+            modifier = Modifier.align(BottomCenter),
+            navHostController
         )
     }
 
@@ -291,7 +293,8 @@ fun CustomChip(
 
 @Composable
 fun BottomBarItem(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    navHostController: NavHostController
 ) {
 
     Column(
@@ -320,7 +323,9 @@ fun BottomBarItem(
                 )
             }
             SpacerWidth(10.dp)
-            AppButton(title = stringResource(R.string.add_to_ba), modifier = Modifier.weight(0.7f))
+            AppButton(title = stringResource(R.string.add_to_ba), modifier = Modifier.weight(0.7f)){
+                navHostController.navigate(Routes.CheckoutScreen)
+            }
         }
     }
 
@@ -343,7 +348,9 @@ fun ProductCount(
 }
 
 @Composable
-fun HeaderIcon() {
+fun HeaderIcon(
+    navHostController: NavHostController
+) {
 
     Row(
         modifier = Modifier
@@ -351,7 +358,9 @@ fun HeaderIcon() {
             .padding(horizontal = 15.dp, vertical = 50.dp),
         horizontalArrangement = Arrangement.SpaceBetween
     ) {
-        AppIconButtonDrawable(icon = R.drawable.back)
+        AppIconButtonDrawable(icon = R.drawable.back){
+            navHostController.navigateUp()
+        }
         AppIconButtonDrawable(icon = R.drawable.share)
     }
 

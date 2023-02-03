@@ -47,7 +47,9 @@ fun CheckoutScreen(
         AppIconButton(
             icon = Icons.Default.ArrowBack,
             modifier = Modifier.padding(top = 40.dp, start = 20.dp)
-        )
+        ) {
+            navHostController.navigateUp()
+        }
         LazyColumn(
             modifier = Modifier.padding(top = 85.dp, bottom = 80.dp)
         ) {
