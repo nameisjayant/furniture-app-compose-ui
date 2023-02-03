@@ -11,6 +11,7 @@ import androidx.compose.material.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
@@ -36,4 +37,22 @@ fun AppIconButton(
     IconButton(onClick = {onClick()}, modifier = modifier.size(32.dp)) {
        Icon(painter = painterResource(id = icon), contentDescription = "", tint = tint)
     }
+}
+@SuppressLint("ModifierParameter")
+@Composable
+fun AppIcon(
+    icon:ImageVector,
+    tint:Color = Color.Unspecified,
+    modifier: Modifier = Modifier,
+) {
+    Icon(icon, contentDescription = "", tint = tint, modifier = modifier)
+}
+@SuppressLint("ModifierParameter")
+@Composable
+fun AppIconDrawable(
+    @DrawableRes icon:Int,
+    tint:Color = Color.Unspecified,
+    modifier: Modifier = Modifier,
+) {
+    Icon(painter = painterResource(id = icon), contentDescription = "", tint = tint, modifier = modifier)
 }

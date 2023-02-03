@@ -1,5 +1,6 @@
 package com.nameisjayant.furnitureapp.screens
 
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -8,8 +9,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Minimize
+import androidx.compose.material.icons.filled.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Alignment.Companion.CenterVertically
@@ -26,11 +26,10 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.nameisjayant.furnitureapp.R
 import com.nameisjayant.furnitureapp.commonUi.AppIconButton
+import com.nameisjayant.furnitureapp.commonUi.AppIconDrawable
 import com.nameisjayant.furnitureapp.commonUi.SpacerHeight
-import com.nameisjayant.furnitureapp.ui.theme.DarkOrange
-import com.nameisjayant.furnitureapp.ui.theme.LightGray
-import com.nameisjayant.furnitureapp.ui.theme.PoppinFont
-import com.nameisjayant.furnitureapp.ui.theme.TextColor
+import com.nameisjayant.furnitureapp.commonUi.SpacerWidth
+import com.nameisjayant.furnitureapp.ui.theme.*
 
 @Composable
 fun ProductDetailScreen() {
@@ -42,7 +41,8 @@ fun ProductDetailScreen() {
             modifier = Modifier.fillMaxSize()
         ) {
             Image(
-                painter = painterResource(id = R.drawable.product_four), contentDescription = "",
+                painter = painterResource(id = R.drawable.product_four),
+                contentDescription = "",
                 contentScale = ContentScale.FillWidth,
                 modifier = Modifier
                     .height(250.dp)
@@ -58,6 +58,9 @@ fun ProductDetailScreen() {
                 LazyColumn {
                     item {
                         ProductHeaderSection()
+                    }
+                    item {
+                        RatingSection()
                     }
                 }
             }
@@ -82,30 +85,28 @@ fun ProductHeaderSection() {
         )
         SpacerHeight(10.dp)
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
+            modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(
                 text = "$599", style = TextStyle(
-                    fontSize = 20.sp,
-                    fontWeight = FontWeight.W600,
-                    color = DarkOrange
+                    fontSize = 20.sp, fontWeight = FontWeight.W600, color = DarkOrange
                 )
             )
             Row(
             ) {
-                ProductCount(icon = Icons.Default.Minimize){
-                    if(count != "0")
-                    count=count.toInt().minus(1).toString()
+                ProductCount(icon = Icons.Default.Minimize) {
+                    if (count != "0") count = count.toInt().minus(1).toString()
                 }
-                Text(text = count, style = TextStyle(
-                    fontSize = 12.sp,
-                    fontWeight = FontWeight.W400,
-                    color = TextColor,
-                ),
-                modifier = Modifier.align(CenterVertically).padding(horizontal = 15.dp)
+                Text(
+                    text = count, style = TextStyle(
+                        fontSize = 12.sp,
+                        fontWeight = FontWeight.W400,
+                        color = TextColor,
+                    ), modifier = Modifier
+                        .align(CenterVertically)
+                        .padding(horizontal = 15.dp)
                 )
-                ProductCount(icon = Icons.Default.Add){
+                ProductCount(icon = Icons.Default.Add) {
                     count = count.toInt().plus(1).toString()
                 }
             }
@@ -114,13 +115,91 @@ fun ProductHeaderSection() {
 }
 
 @Composable
+fun RatingSection() {
+
+    val personIcons =
+        listOf(R.drawable.person_1, R.drawable.person_2, R.drawable.person_3, R.drawable.person_4)
+
+    Box(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
+            .clip(RoundedCornerShape(8.dp))
+            .background(Background)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(15.dp),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Column() {
+                Row {
+                    Row {
+                        (0..4).forEach {
+                            Icon(
+                                Icons.Default.StarRate,
+                                contentDescription = "",
+                                tint = Yellow,
+                            )
+                        }
+                    }
+                    SpacerWidth(10.dp)
+                    Text(
+                        text = "5.0", style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.W400,
+                            color = TextColor
+                        ),
+                        modifier = Modifier.align(CenterVertically)
+                    )
+                }
+                Row(
+                    modifier = Modifier.padding(top = 10.dp)
+                ) {
+                    Text(
+                        text = "98 Reviews", style = TextStyle(
+                            fontSize = 12.sp,
+                            fontWeight = FontWeight.W400,
+                            color = LightGray
+                        ),
+                        modifier = Modifier.align(CenterVertically)
+                    )
+                    SpacerWidth()
+                    Icon(
+                        Icons.Default.KeyboardArrowRight,
+                        contentDescription = "",
+                        tint = LightGray
+                    )
+                }
+            }
+            Row(
+                modifier = Modifier.align(CenterVertically)
+            ) {
+                personIcons.forEachIndexed { index, i ->
+                    Log.d("main", "RatingSection: $index ")
+                    AppIconDrawable(
+                        icon = i,
+                        modifier = Modifier
+                            .size(32.dp)
+                            .offset(
+                                x = if (index > 0) -(10.dp) else 0.dp, y = 0.dp
+                            ),
+                    )
+                }
+
+            }
+        }
+    }
+}
+
+@Composable
 fun ProductCount(
-    icon: ImageVector,
-    modifier: Modifier = Modifier,
-    onClick: () -> Unit = {}
+    icon: ImageVector, modifier: Modifier = Modifier, onClick: () -> Unit = {}
 ) {
     TextButton(
-        onClick = { onClick() }, modifier = modifier.size(24.dp),
+        onClick = { onClick() },
+        modifier = modifier.size(24.dp),
         shape = RoundedCornerShape(8.dp),
         elevation = ButtonDefaults.elevation(0.dp),
         border = BorderStroke(2.dp, DarkOrange)
