@@ -43,10 +43,7 @@ import com.google.accompanist.flowlayout.MainAxisAlignment
 import com.nameisjayant.furnitureapp.R
 import com.nameisjayant.furnitureapp.commonUi.SpacerHeight
 import com.nameisjayant.furnitureapp.commonUi.SpacerWidth
-import com.nameisjayant.furnitureapp.models.Category
-import com.nameisjayant.furnitureapp.models.PopularProducts
-import com.nameisjayant.furnitureapp.models.categoryList
-import com.nameisjayant.furnitureapp.models.popularProductList
+import com.nameisjayant.furnitureapp.models.*
 import com.nameisjayant.furnitureapp.ui.theme.*
 
 
@@ -141,6 +138,12 @@ fun RoomsHeader() {
                 fontFamily = PoppinFont,
             )
         )
+        SpacerHeight(10.dp)
+        LazyRow{
+            items(roomList,key={it.id}){
+                RoomSection(rooms = it)
+            }
+        }
     }
 }
 
@@ -324,7 +327,10 @@ fun HomeHeader(
 ) {
 
     Row(
-        modifier = Modifier.fillMaxWidth(), horizontalArrangement = Arrangement.SpaceBetween
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 20.dp),
+        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         Text(
             text = stringResource(R.string.heading_text), style = TextStyle(
@@ -347,4 +353,31 @@ fun HomeHeader(
         }
     }
 
+}
+
+@Composable
+fun RoomSection(
+    rooms: Rooms
+) {
+    Box(
+        modifier = Modifier.padding(end = 15.dp)
+    ) {
+        Image(
+            painter = painterResource(id = rooms.image),
+            contentDescription = rooms.title,
+            modifier = Modifier
+                .width(127.dp)
+                .height(195.dp)
+                .clip(RoundedCornerShape(8.dp))
+        )
+        Text(
+            text = rooms.title, style = TextStyle(
+                fontSize = 14.sp,
+                fontWeight = FontWeight.W400,
+                color = TextColor
+            ), modifier = Modifier
+                .width(100.dp)
+                .padding(20.dp)
+        )
+    }
 }
